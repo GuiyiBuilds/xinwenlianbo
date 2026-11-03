@@ -1,0 +1,44 @@
+name: Update daily transcript
+# manual re-registration marker
+
+on:
+  workflow_dispatch:
+  schedule:
+    # UTC 12:30 = 北京时间 20:30（新闻联播 19:00 播出后页面已更新）
+    - cron: '30 12 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Crawl and commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run tests
+        run: node --test
+
+      - name: Crawl today
+        run: node index.js
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "AUTO UPDATE $(date -u +%Y-%m-%d) [bot]"
+            git push
+          fi
