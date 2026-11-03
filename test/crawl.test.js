@@ -33,6 +33,12 @@ test('parseAbstract: holds the program summary with line breaks', () => {
 	assert.ok(text.includes('\n\n'));
 });
 
+test('parseAbstract: item-internal colons keep the line intact', () => {
+	const html = '<div class="nrjianjie_shadow"><div class="con"><ul><li><p>本期节目主要内容：1.央视快评：为民造福是最大政绩；2.国内联播快讯</p></li></ul></div></div>';
+	const text = parseAbstract(html);
+	assert.equal(text, '本期节目主要内容：\n\n1.央视快评：为民造福是最大政绩；\n\n2.国内联播快讯');
+});
+
 test('parseNewsPage: strips the video prefix from the title', () => {
 	const { title } = parseNewsPage(load('fixture-news.html'));
 	assert.equal(title, '应习近平邀请 加蓬总统将访华');
