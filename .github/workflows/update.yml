@@ -4,8 +4,8 @@ name: Update daily transcript
 on:
   workflow_dispatch:
   schedule:
-    # UTC 12:30 = 北京时间 20:30（新闻联播 19:00 播出后页面已更新）
-    - cron: '30 12 * * *'
+    # UTC 13:00 = 北京时间 21:00（新闻联播 19:00 播出后页面已更新）
+    - cron: '0 13 * * *'
 
 permissions:
   contents: write
