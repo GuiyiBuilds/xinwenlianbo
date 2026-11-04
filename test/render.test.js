@@ -33,6 +33,15 @@ test('prependCatalogue: same date returns byte-identical text', () => {
 	assert.equal(prependCatalogue(existing, { date: '20261102', abstract: 'a' }), existing);
 });
 
+test('prependCatalogue: duplicate date anywhere in the list is rejected', () => {
+	const existing = JSON.stringify([
+		{ date: '20261103', abstract: 'x' },
+		{ date: '20261102', abstract: 'a' },
+		{ date: '20261101', abstract: 'b' },
+	]);
+	assert.equal(prependCatalogue(existing, { date: '20261102', abstract: 'a' }), existing);
+});
+
 test('insertReadmeLine: adds one line after the marker', () => {
 	const readme = '# t\n\n<!-- INSERT -->\n';
 	const out = insertReadmeLine(readme, '20261102');
