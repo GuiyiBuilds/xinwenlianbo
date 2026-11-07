@@ -6,6 +6,9 @@ on:
   schedule:
     # UTC 13:00 = 北京时间 21:00（新闻联播 19:00 播出后页面已更新）
     - cron: '0 13 * * *'
+    # UTC 14:30 = 北京时间 22:30（兜底：GitHub schedule 高峰期可能延迟数小时甚至丢触发；
+    # 第二次触发时文件已存在会被 index.js 幂等跳过，双触发安全）
+    - cron: '30 14 * * *'
 
 permissions:
   contents: write
