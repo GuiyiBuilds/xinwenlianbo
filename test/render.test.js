@@ -20,6 +20,14 @@ test('renderMarkdown: document holds title abstract items and timestamp', () => 
 	assert.ok(md.includes('(更新时间戳:'));
 });
 
+test('renderMarkdown: detailed-news section carries an item-count hint line', () => {
+	const md = renderMarkdown(sample);
+	const section = md.slice(md.indexOf('## 详细新闻'));
+	assert.ok(section.includes('> 以下为当日全部新闻正文，共 1 条，按 ### 小标题分节。'));
+	const two = renderMarkdown({ ...sample, items: [...sample.items, { title: '新闻二', content: '正文', link: 'https://tv.cctv.com/b.shtml' }] });
+	assert.ok(two.includes('共 2 条'));
+});
+
 test('prependCatalogue: newest entry lands first', () => {
 	const out = JSON.parse(prependCatalogue('[]', { date: '20261102', abstract: 'a' }));
 	assert.equal(out[0].date, '20261102');
